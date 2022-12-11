@@ -9,8 +9,8 @@ use App\Call;
 use App\Contact;
 use App\Sms;
 use App\Services\ContactService;
-use App\Services\Providers\Verizon;
-use App\Services\Providers\TMobile;
+use App\Services\Providers\IVerizon;
+use App\Services\Providers\IMobile;
 use App\Interfaces\CarrierInterface;
 
 use PHPUnit\Framework\TestCase;
@@ -70,7 +70,8 @@ class MobileTest extends TestCase
 			->withArgs(['0001'])
 			->andReturn(false);
 
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('Number provided is invalid');
 
 		$mobile = new Mobile($this->provider);
 		$mobile->sendSms('0001', 'This is a test message!');
