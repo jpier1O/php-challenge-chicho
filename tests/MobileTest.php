@@ -71,7 +71,6 @@ class MobileTest extends TestCase
 		$this->assertInstanceOf(Call::class, $mobile->makeCallByName('Jean Sullon'));
 	}
 
-
 	/**
 	 * @runTestsInSeparateProcesses
 	 */
@@ -85,11 +84,32 @@ class MobileTest extends TestCase
 			->withArgs(['0001'])
 			->andReturn(false);
 
-		$this->expectException(\Exception::class);
-		$this->expectExceptionMessage('Number provided is invalid');
+		$this->expectException(\InvalidArgumentException::class);
 
 		$mobile = new Mobile($this->provider);
 		$mobile->sendSms('0001', 'This is a test message!');
+	}
+
+	/**
+	 * @runTestsInSeparateProcesses
+	 */
+	/** @test */
+	public function it_should_send_and_track_a_new_twilio_sms()
+	{
+		$sms = m::mock('overload:'.SMS::class);
+
+		$this->provider->shouldReceive('sendSms')
+			->withArgs(['(923)461-8251', 'This is a test message!', true])
+			->andReturn($sms);
+
+		m::mock('alias:'.ContactService::class)
+			->shouldReceive('validateNumber')
+			->withArgs(['(923)461-8251'])
+			->andReturn(true);
+
+		$mobile = new Mobile($this->provider);
+
+		$this->assertInstanceOf(Sms::class, $mobile->sendSms('(923)461-8251', 'This is a test message!', true));
 	}
 
 }
