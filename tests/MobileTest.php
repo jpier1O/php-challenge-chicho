@@ -14,12 +14,17 @@ use App\Services\Providers\IMobile;
 use App\Interfaces\CarrierInterface;
 
 use PHPUnit\Framework\TestCase;
-
+/**
+ * @runTestsInSeparateProcesses
+ */
 class MobileTest extends TestCase
 {
 
 	protected $provider;
 
+	/**
+	 * @runTestsInSeparateProcesses
+	 */
 	protected function setUp(): void
 	{
 		parent::setUp();
@@ -27,6 +32,9 @@ class MobileTest extends TestCase
 		$this->provider = m::mock(CarrierInterface::class);
 	}
 
+	/**
+	 * @runTestsInSeparateProcesses
+	 */
 	/** @test */
 	public function it_returns_null_when_name_empty()
 	{
@@ -35,6 +43,9 @@ class MobileTest extends TestCase
 		$this->assertNull($mobile->makeCallByName(''));
 	}
 
+	/**
+	 * @runTestsInSeparateProcesses
+	 */
 	/** @test */
 	public function it_returns_a_call_instance_when_calling_by_name()
 	{
@@ -60,6 +71,10 @@ class MobileTest extends TestCase
 		$this->assertInstanceOf(Call::class, $mobile->makeCallByName('Jean Sullon'));
 	}
 
+
+	/**
+	 * @runTestsInSeparateProcesses
+	 */
 	/** @test */
 	public function it_throws_an_error_exception_if_invalid_phonenumber()
 	{
